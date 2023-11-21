@@ -1,5 +1,7 @@
 import javax.servlet.ServletException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mysql {
     private static Connection conn;
@@ -47,5 +49,33 @@ public class Mysql {
         }
         if (isValidUser) return true;
         else return false;
+    }
+
+    public static void insertMessage(String username, String message) {
+        String sql = "INSERT INTO message (username, message) VALUES (?, ?);";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, message);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Message> selectLast100Messages() {
+        String sql = "SELECT * FROM message ORDER BY id DESC LIMIT 100;";
+        ArrayList<Message> messages = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String username = rs.getString("username");
+                String message = rs.getString("message");
+                messages.add(new Message(username,message));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
     }
 }

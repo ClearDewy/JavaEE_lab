@@ -23,11 +23,13 @@ public class LoginListener implements ServletContextListener, HttpSessionListene
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         /* Session is created. */
+        currentPeople++;
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         /* Session is destroyed. */
+        currentPeople--;
     }
 
     @Override
