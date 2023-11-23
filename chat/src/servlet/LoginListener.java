@@ -1,7 +1,10 @@
+package servlet;
+
+import bean.Mysql;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.sql.Connection;
 
 @WebListener
 public class LoginListener implements ServletContextListener, HttpSessionListener, HttpSessionAttributeListener {

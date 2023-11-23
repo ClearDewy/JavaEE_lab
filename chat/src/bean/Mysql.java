@@ -1,3 +1,6 @@
+package bean;
+
+
 import javax.servlet.ServletException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +19,6 @@ public class Mysql {
             String password = "040110";
             conn = DriverManager.getConnection(url, username, password);
 
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -32,23 +34,36 @@ public class Mysql {
         }
     }
 
-    public static boolean find(String username ,String password){
-        boolean isValidUser=false;
+    public static boolean login(String username ,String password){
         try{
-            String sql="SELECT * FROM `user` WHERE username = ? AND password = ?";
+            String sql="SELECT `password` FROM `user` WHERE username = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                isValidUser = rs.next();
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getString("password").equals(password);
             }
             pstmt.close();
         } catch (SQLException e){
             e.printStackTrace();
         }
-        if (isValidUser) return true;
-        else return false;
+        return false;
+    }
+
+    public static boolean register(String username ,String password){
+        boolean success=false;
+        try{
+            String sql="INSERT INTO `user`(username, password) VALUES (?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            success=pstmt.executeUpdate()>0;
+            pstmt.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return success;
     }
 
     public static void insertMessage(String username, String message) {

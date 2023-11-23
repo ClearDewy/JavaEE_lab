@@ -1,3 +1,5 @@
+package bean;
+
 /**
  * @ Author: ClearDewy
  * @ Description:
