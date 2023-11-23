@@ -10,8 +10,8 @@ public class LoginFail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("登录失败,请重试。");
+        request.setAttribute("errorMessage", "登录失败，请重试。");
+        request.getRequestDispatcher("/login").forward(request,response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

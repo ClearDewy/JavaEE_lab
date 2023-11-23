@@ -43,7 +43,10 @@ public class Login extends HttpServlet {
         out.println("<meta charset='UTF-8'>");
         out.println("<title>登陆界面</title>");
         out.println("</head><body>");
-        out.println("<form action='http://localhost:8080/JavaEE_lab/Chat' method='post'>");
+        if (request.getAttribute("errorMessage")!=null){
+            out.println("<h1>"+request.getAttribute("errorMessage").toString()+"</h1>");
+        }
+        out.println("<form action='./login' method='post'>");
         out.println("姓名: <input type='text' name='username' value='" + username + "'><br>");
         out.println("学号: <input type='password' name='password' value='" + password + "'><br>");
         out.println("<input type='checkbox' name='remember' " + remember + "><label for='remember'>记住密码</label><br>");
@@ -99,7 +102,7 @@ public class Login extends HttpServlet {
             //Filter 验证设置
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
-            response.sendRedirect(request.getContextPath()+"/LoginSuccess");
+            response.sendRedirect(request.getContextPath()+"/login-success");
         }
 
 

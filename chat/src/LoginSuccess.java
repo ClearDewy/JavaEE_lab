@@ -3,6 +3,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -18,6 +20,7 @@ public class LoginSuccess extends HttpServlet {
         response.setCharacterEncoding("UTF-8");// 设置字符编码为 UTF-8
 
         List<Message> messages = Mysql.selectLast100Messages();
+        Collections.reverse(messages);
 
         try (PrintWriter out = response.getWriter()) {
             out.println("<html><head><title>Chat</title></head><body>");
@@ -30,7 +33,7 @@ public class LoginSuccess extends HttpServlet {
             }
 
             out.println("</div>");
-            out.println("<form action='chat' method='post'>");
+            out.println("<form action='./login-success' method='post'>");
             out.println("<input type='text' name='message' />");
             out.println("<input type='submit' value='Send' />");
             out.println("</form>");
