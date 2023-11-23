@@ -6,6 +6,7 @@ package bean;
  **/
 public class CommodityInfo {
     private int id;
+    private String img;
     private String name;
     private double price;
 
@@ -32,12 +33,21 @@ public class CommodityInfo {
         return price;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }
 
-    public CommodityInfo(int id, String name, double price) {
+    public CommodityInfo(int id, String img, String name, double price) {
         this.id = id;
+        this.img = img;
         this.name = name;
         this.price = price;
     }

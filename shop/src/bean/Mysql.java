@@ -2,6 +2,8 @@ package bean;
 
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ Author: ClearDewy
@@ -68,5 +70,76 @@ public class Mysql implements Serializable {
         return success;
     }
 
+    public static List<ShopCarItem> getAllShop(int user_id){
+        ArrayList<ShopCarItem> shopCarItems = new ArrayList<>();
+
+        try{
+            String sql="SELECT `commodity`.id, `img`, `name`, `price`,COALESCE(`count`, 0) from `commodity` LEFT JOIN `order` on commodity.id = order.commodity_id and user_id= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, user_id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                shopCarItems.add(new ShopCarItem(new CommodityInfo(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4)
+                ),rs.getInt(5)));
+            }
+
+            pstmt.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return shopCarItems;
+    }
+
+    public static void updateShopCar(int user_id,int commodity_id,int count){
+        try{
+            String sql = "INSERT INTO `order` (user_id, commodity_id, count) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE count = VALUES(count);";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, user_id);      // 假设 userId 是用户ID
+            pstmt.setInt(2, commodity_id); // 假设 commodityId 是商品ID
+            pstmt.setInt(3, count);       // 假设 count 是数量
+            pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static ShopCar getMyShopCar(int user_id){
+        ShopCar shopCar = new ShopCar();
+        try{
+            String sql="SELECT `commodity`.id, `img`, `name`, `price`,`count` from `commodity` inner JOIN `order` on commodity.id = order.commodity_id where user_id= ? and count!=0";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, user_id);      // 假设 userId 是用户ID
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                shopCar.addShopCarItem(new ShopCarItem(new CommodityInfo(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4)
+                ),rs.getInt(5)));
+            }
+
+            pstmt.close();
+
+            sql="SELECT SUM(`price`*`count`) FROM commodity INNER JOIN `order` ON commodity.id = `order`.commodity_id where user_id= ? and count!=0";
+            pstmt=conn.prepareStatement(sql);
+            pstmt.setInt(1, user_id);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                shopCar.setTotalPrice(rs.getDouble(1));
+            }
+            pstmt.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return shopCar;
+    }
 
 }

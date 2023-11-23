@@ -17,11 +17,13 @@
     <div class="form-wrapper">
       <%
         String username="",password="";
-        for (Cookie cookie :request.getCookies()){
-          if ("username".equals(cookie.getName())) {
-            username = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-          } else if ("password".equals(cookie.getName())) {
-            password = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+        if (request.getCookies()!=null){
+          for (Cookie cookie :request.getCookies()){
+            if ("username".equals(cookie.getName())) {
+              username = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+            } else if ("password".equals(cookie.getName())) {
+              password = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+            }
           }
         }
 

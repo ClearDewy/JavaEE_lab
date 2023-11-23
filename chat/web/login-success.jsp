@@ -1,4 +1,4 @@
-<%--登录页面--%>
+<%@ page import="servlet.LoginListener" %><%--登录页面--%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,7 @@
 <body>
 <div class="container">
   <div class="login-wrapper">
-    <div class="header">聊天室</div>
+    <div class="header">聊天室（当前人数<%=LoginListener.currentPeople%>）</div>
     <iframe src="messages.jsp" style="height: 70%;width: 100%;border: none;padding: 0" ></iframe>
     <div class="msg">
       <form action="./login-success" method="post">

@@ -14,7 +14,7 @@
         Object username = request.getParameter("username");
         Object password = request.getParameter("password");
         int user_id;
-        if (username==null||password==null||(user_id=Mysql.login(username.toString(),password.toString()))!=-1){
+        if (username==null||password==null||(user_id=Mysql.login(username.toString(),password.toString()))==-1){
 //        登录失败
     %>
         <jsp:forward page="index.jsp">
