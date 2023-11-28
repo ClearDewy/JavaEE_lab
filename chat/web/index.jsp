@@ -16,6 +16,7 @@
     <div class="header">Login</div>
     <div class="form-wrapper">
       <%
+        // 处理cookie
         String username="",password="";
         if (request.getCookies()!=null){
           for (Cookie cookie :request.getCookies()){

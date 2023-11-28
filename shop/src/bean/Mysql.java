@@ -127,6 +127,7 @@ public class Mysql implements Serializable {
 
             pstmt.close();
 
+            // 计算商品总价格
             sql="SELECT SUM(`price`*`count`) FROM commodity INNER JOIN `order` ON commodity.id = `order`.commodity_id where user_id= ? and count!=0";
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1, user_id);
